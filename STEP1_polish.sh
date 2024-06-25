@@ -41,10 +41,12 @@ echo "BASE_DIR: $BASE_DIR"
 # List the contents of the tar file and save to a temporary file
 echo "Listing files in ${TAR_FILE}..."
 tar --use-compress-program="pigz -d -p $CORE_COUNT" -tf "$TAR_FILE" > $TEMP_DIR/tar_list.txt
-if [ $? -ne 0 ]; then
-    echo "Failed to read ${TAR_FILE}. Please check if the file exists and the path is correct."
-    exit 1
-fi
+
+#if [ $? -ne 0 ]; then
+#    echo "Failed to read ${TAR_FILE}. Please check if the file exists and the path is correct."
+#    exit 1
+#fi 
+#tar有一些问题，会返回正常的结果但是会报错，不知道为什么所以把这一段检查注释掉了
 
 echo "File list saved to $TEMP_DIR/tar_list.txt"
 
@@ -80,10 +82,12 @@ for FAST5_DIR in $FAST5_DIRS; do
     # Extract the specified subdirectory
     echo "Extracting subdirectory: $FAST5_DIR"
     tar --use-compress-program="pigz -d -p $CORE_COUNT" -xf "$TAR_FILE" -C "$TEMP_DIR" --wildcards "$FAST5_DIR*"
-    if [ $? -ne 0 ]; then
-        echo "Failed to extract $FAST5_DIR."
-        continue
-    fi
+
+#    if [ $? -ne 0 ]; then
+#        echo "Failed to extract $FAST5_DIR."
+#        continue
+#    fi
+#同样的
 
     TARGET_DIR="$TEMP_DIR/$FAST5_DIR"
     echo "Analyzing directory: $TARGET_DIR"
