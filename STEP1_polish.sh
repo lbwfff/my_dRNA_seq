@@ -88,6 +88,7 @@ for FAST5_DIR in $FAST5_DIRS; do
     FILES=$(grep "^$FAST5_DIR/" $TEMP_DIR/tar_list.txt)
     echo "$FILES" | tar --use-compress-program="pigz -d -p $CORE_COUNT" -xf "$TAR_FILE" -C "$TEMP_DIR" -T -
 #倒是没有报错，可以试一下哪种快一些
+#不行全部解压出来了，有问题
 
 
 #    if [ $? -ne 0 ]; then
