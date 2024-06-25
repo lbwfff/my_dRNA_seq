@@ -81,7 +81,14 @@ for FAST5_DIR in $FAST5_DIRS; do
  
     # Extract the specified subdirectory
     echo "Extracting subdirectory: $FAST5_DIR"
-    tar --use-compress-program="pigz -d -p $CORE_COUNT" -xf "$TAR_FILE" -C "$TEMP_DIR" --wildcards "$FAST5_DIR*" #感觉每次解压都要历经整个文件的内容，虽然已经用pigz加速了，但还是感觉很慢
+    
+#    tar --use-compress-program="pigz -d -p $CORE_COUNT" -xf "$TAR_FILE" -C "$TEMP_DIR" --wildcards "$FAST5_DIR*" 
+    #感觉每次解压都要历经整个文件的内容，虽然已经用pigz加速了，但还是感觉很慢，有一种为tar文件建立索引的方法可以试一下
+    
+    FILES=$(grep "^$FAST5_DIR/" $TEMP_DIR/tar_list.txt)
+    echo "$FILES" | tar --use-compress-program="pigz -d -p $CORE_COUNT" -xf "$TAR_FILE" -C "$TEMP_DIR" -T -
+#倒是没有报错，可以试一下哪种快一些
+
 
 #    if [ $? -ne 0 ]; then
 #        echo "Failed to extract $FAST5_DIR."
