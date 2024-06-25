@@ -98,7 +98,7 @@ for FAST5_DIR in $FAST5_DIRS; do
 	
 	echo "Start minimap"
 
-	minimap2 -ax map-ont -uf -t 20 --secondary=no /scratch/lb4489/project/dRNA/GRCh38.mmi  $TEMP_DIR/fastq/$subfold/pass/*.fastq > $TEMP_DIR/$subfold.sam 2>> $TEMP_DIR/$subfold.bam.log 
+	minimap2 -ax map-ont -uf -t $CORE_COUNT --secondary=no /scratch/lb4489/project/dRNA/GRCh38.mmi  $TEMP_DIR/fastq/$subfold/pass/*.fastq > $TEMP_DIR/$subfold.sam 2>> $TEMP_DIR/$subfold.bam.log 
  	#使用minimap对fastq文件进行分析，这里我其实不太明白，对于索引我应该用基因组还是转录组呢？
   
 	samtools view -Sb $TEMP_DIR/$subfold.sam | samtools sort -o $TEMP_DIR/$subfold.bam - &>> $TEMP_DIR/$subfold.bam.log
@@ -114,7 +114,7 @@ for FAST5_DIR in $FAST5_DIRS; do
 	--signal-index \
 	--scale-events \
 	--summary $TEMP_DIR/$subfold.summary.txt \
-	--threads 20 > $TEMP_DIR/$subfold.eventalign.txt
+	--threads $CORE_COUNT > $TEMP_DIR/$subfold.eventalign.txt
 
     else
         echo "Extracted directory not found: $TARGET_DIR"
