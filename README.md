@@ -22,3 +22,10 @@ sbatch demo2.sh test.tar.gz 18 'fast5'
 awk 'FNR==1 && NR!=1 { next; } { print }' $(ls *eventalign.txt | sort) > merge_eventalign.txt
 awk 'FNR==1 && NR!=1 { next; } { print }' $(ls *summary.txt | sort) > merge_summary.txt
 ```
+
+#bam文件
+```
+samtools merge merged.bam  ./*.bam
+```
+
+
