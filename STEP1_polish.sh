@@ -81,7 +81,7 @@ for FAST5_DIR in $FAST5_DIRS; do
  
     # Extract the specified subdirectory
     echo "Extracting subdirectory: $FAST5_DIR"
-    tar --use-compress-program="pigz -d -p $CORE_COUNT" -xf "$TAR_FILE" -C "$TEMP_DIR" --wildcards "$FAST5_DIR*"
+    tar --use-compress-program="pigz -d -p $CORE_COUNT" -xf "$TAR_FILE" -C "$TEMP_DIR" --wildcards "$FAST5_DIR*" #感觉每次解压都要历经整个文件的内容，虽然已经用pigz加速了，但还是感觉很慢
 
 #    if [ $? -ne 0 ]; then
 #        echo "Failed to extract $FAST5_DIR."
