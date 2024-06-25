@@ -23,7 +23,7 @@ fi
 # Set parameters
 TAR_FILE="$1"
 CORE_COUNT="$2"
-#FOLDER_COUNT="$3"
+#FOLDER_COUNT="$3"  #跑demo时做的限制
 BASE_DIR="${4:-fast5}"
 
 # Temporary extraction directory
@@ -91,24 +91,26 @@ for FAST5_DIR in $FAST5_DIRS; do
     # Check if the extracted directory exists
     if [ -d "$TARGET_DIR" ]; then
         # Add your analysis code here
-        echo "Running analysis on files in directory: $TARGET_DIR"
+        echo "Running analysis on files in directory: $TARGET_DIR"     #这之后才是正式的分析代码
 	
 	echo "Start basecaller"
-	/scratch/lb4489/project/dRNA/ont-guppy/bin/guppy_basecaller -i $TARGET_DIR -s $TEMP_DIR/fastq/$subfold --flowcell FLO-MIN106 --kit SQK-RNA002 --device auto -q 0 -r 
+	/scratch/lb4489/project/dRNA/ont-guppy/bin/guppy_basecaller -i $TARGET_DIR -s $TEMP_DIR/fastq/$subfold --flowcell FLO-MIN106 --kit SQK-RNA002 --device auto -q 0 -r  #使用guppy进行baseball
 	
 	echo "Start minimap"
 
-	minimap2 -ax map-ont -uf -t 20 --secondary=no /scratch/lb4489/project/dRNA/GRCh38.mmi  $TEMP_DIR/fastq/$subfold/pass/*.fastq > $TEMP_DIR/$subfold.sam 2>> $TEMP_DIR/$subfold.bam.log
+	minimap2 -ax map-ont -uf -t 20 --secondary=no /scratch/lb4489/project/dRNA/GRCh38.mmi  $TEMP_DIR/fastq/$subfold/pass/*.fastq > $TEMP_DIR/$subfold.sam 2>> $TEMP_DIR/$subfold.bam.log 
+ 	#使用minimap对fastq文件进行分析，这里我其实不太明白，对于索引我应该用基因组还是转录组呢？
+  
 	samtools view -Sb $TEMP_DIR/$subfold.sam | samtools sort -o $TEMP_DIR/$subfold.bam - &>> $TEMP_DIR/$subfold.bam.log
 	samtools index $TEMP_DIR/$subfold.bam &>> $TEMP_DIR/$subfold.bam.log
 
 	echo "Start polish"
 
-	nanopolish index -d $TARGET_DIR $TEMP_DIR/fastq/$subfold/pass/*.fastq
+	nanopolish index -d $TARGET_DIR $TEMP_DIR/fastq/$subfold/pass/*.fastq #polish
 
 	nanopolish eventalign --reads $TEMP_DIR/fastq/$subfold/pass/*.fastq \
 	--bam $TEMP_DIR/$subfold.bam \
-	--genome /scratch/lb4489/bioindex/GRCh38.p14.genome.fa \
+	--genome /scratch/lb4489/bioindex/GRCh38.p14.genome.fa \ #同理，这里的fasta文件也值得考虑，在demo中我使用了基因组，m6Anet的输出结果就变成了染色体以及基因组位置，这其实更方便了（？），但显然和m6Anet的设计以及官方demo不一样的
 	--signal-index \
 	--scale-events \
 	--summary $TEMP_DIR/$subfold.summary.txt \
