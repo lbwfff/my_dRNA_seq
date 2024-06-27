@@ -1,0 +1,24 @@
+#!/bin/bash
+#SBATCH -p compute
+#SBATCH -c 5
+#SBATCH -t 4:00:00
+
+module load all
+module load gencore
+module load samtools/1.10
+
+awk 'FNR==1 && NR!=1 { next; } { print }' $(ls *eventalign.txt | sort) > WT1_eventalign.txt
+awk 'FNR==1 && NR!=1 { next; } { print }' $(ls *summary.txt | sort) > WT1_summary.txt
+
+samtools merge WT1.bam  ./*.bam
+
+output_file="WT1.fastq"
+
+[ -f $output_file ] && rm $output_file
+
+find . -type d -name "pass" -exec find {} -type f -name "*.fastq" \; | while read file; do
+    cat "$file" >> "$output_file"
+    echo "Merged: $file"
+done
+
+echo "All files merged into $output_file"
