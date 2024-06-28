@@ -16,6 +16,8 @@ sbatch demo2.sh test.tar.gz 18 'fast5'
 ```
 其中18为核心数，fast5是母文件夹，我们以fast5下一级的文件夹为单位进行的分析
 
+STEP1_speedup.sh的分析和STEP1_polish.sh一模一样但是为了加速分析流程进行修改，在STEP1_polish.sh中根据子文件夹进行了分批次的处理，而在STEP1_speedup.sh则根据文件数量进行的处理，一次对更多数量的文件进行操作可以减少解压的次数
+此外也对解压方式进行了修改，应该可以加快许多
 
 #合并结果
 ```
