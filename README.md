@@ -19,7 +19,7 @@ sbatch demo2.sh test.tar.gz 18 'fast5'
 STEP1_speedup.sh的分析和STEP1_polish.sh一模一样但是为了加速分析流程进行修改，在STEP1_polish.sh中根据子文件夹进行了分批次的处理，而在STEP1_speedup.sh则根据文件数量进行的处理，一次对更多数量的文件进行操作可以减少解压的次数
 此外也对解压方式进行了修改，应该可以加快许多
 
-#合并结果
+#合并结果（PS：这种方法对合并结果导致了reads index的崩塌，对于callpeak可能没有影响，但是对于定量一定会有影响，后续需要调整）
 ```
 awk 'FNR==1 && NR!=1 { next; } { print }' $(ls *eventalign.txt | sort) > merge_eventalign.txt
 awk 'FNR==1 && NR!=1 { next; } { print }' $(ls *summary.txt | sort) > merge_summary.txt
