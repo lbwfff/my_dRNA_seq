@@ -28,4 +28,7 @@ awk 'FNR==1 && NR!=1 { next; } { print }' $(ls *summary.txt | sort) > merge_summ
 samtools merge merged.bam  ./*.bam
 ```
 
-
+#对于m6Anet结果进行坐标转换
+```
+gppy t2g -g /scratch/lb4489/bioindex/gencode.v44.annotation.gtf -i t2g.txt  > gpos.txt
+```
