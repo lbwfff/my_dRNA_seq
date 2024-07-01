@@ -7,7 +7,7 @@ module load all
 module load gencore
 module load samtools/1.10
 
-awk 'FNR==1 && NR!=1 { next; } { print }' $(ls *eventalign.txt | sort) > WT1_eventalign.txt
+awk 'FNR==1 && NR!=1 { next; } { print }' $(ls *eventalign.txt | sort) > WT1_eventalign.txt #这样合并的话reads index崩塌了，需要换个方法
 awk 'FNR==1 && NR!=1 { next; } { print }' $(ls *summary.txt | sort) > WT1_summary.txt
 
 samtools merge WT1.bam  ./*.bam
