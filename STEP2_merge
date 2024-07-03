@@ -7,8 +7,34 @@ module load all
 module load gencore
 module load samtools/1.10
 
-awk 'FNR==1 && NR!=1 { next; } { print }' $(ls *eventalign.txt | sort) > WT1_eventalign.txt #这样合并的话reads index崩塌了，需要换个方法
+#awk 'FNR==1 && NR!=1 { next; } { print }' $(ls *eventalign.txt | sort) > WT1_eventalign.txt #这样合并的话reads index崩塌了，需要换个方法
 awk 'FNR==1 && NR!=1 { next; } { print }' $(ls *summary.txt | sort) > WT1_summary.txt
+
+
+TMP="./"
+BATCH_SIZE=40000
+
+TOTAL_BATCHES=$(find "$TMP" -name "*.eventalign.txt" | wc -l)
+
+for CURRENT_BATCH in $(seq 1 $TOTAL_BATCHES); do 
+
+INCREMENT=$(((CURRENT_BATCH - 1) * BATCH_SIZE))
+
+INPUT_FILE="$CURRENT_BATCH.eventalign.txt"  
+OUTPUT_FILE="$CURRENT_BATCH.adj.eventalign.txt" 
+
+awk -v increment="$INCREMENT" '
+BEGIN {FS=OFS="\t"}  
+NR == 1 {print; next} 
+{
+    $4 += increment  
+    print
+}' "$INPUT_FILE" > "$OUTPUT_FILE"  #用循环在每个eventalign文件的reads index上了((CURRENT_BATCH - 1) * BATCH_SIZE)，具体的数值应该不重要只要把reads区分开就行了
+
+echo "SAVE modified file $OUTPUT_FILE"
+
+done
+
 
 samtools merge WT1.bam  ./*.bam
 
