@@ -25,6 +25,13 @@ awk 'FNR==1 && NR!=1 { next; } { print }' $(ls *eventalign.txt | sort) > merge_e
 awk 'FNR==1 && NR!=1 { next; } { print }' $(ls *summary.txt | sort) > merge_summary.txt
 ```
 
+还有一种方法就是合并fast5文件，例如slow5tools，nanopolish可以直接用，但是basecall会麻烦一些
+```
+slow5tools f2s fast5_dir -d blow5_dir  -p 8
+slow5tools merge blow5_dir -o file.blow5 -t8
+rm -rf  blow5_dir
+```
+
 #bam文件
 ```
 samtools merge merged.bam  ./*.bam
