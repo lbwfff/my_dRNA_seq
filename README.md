@@ -39,7 +39,7 @@ slow5tools merge blow5_dir -o file.blow5 -t8
 rm -rf  blow5_dir
 ```
 
-对于slow5文件，basecall可以用slow5-dorado，要比buttery-eel好用的多，单basecall的话速度确实很快,后续就同样的nanopolish，方便多了
+对于slow5文件，basecall可以用slow5-dorado，要比buttery-eel好用的多，单basecall的话速度确实很快,后续就同样的nanopolish，方便多了，突然感觉dRNA也不是没有希望了
 ```
 slow5-dorado basecaller /scratch/lb4489/project/dRNA/slow5-dorado/bin/rna002_70bps_fast@v3 --emit-fastq sh_rep2.blow5 > sh_rep2.fastq
 
