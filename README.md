@@ -33,6 +33,24 @@ slow5tools merge blow5_dir -o file.blow5 -t8
 rm -rf  blow5_dir
 ```
 
+对于slow5文件，basecall可以用slow5-dorado，要比buttery-eel好用的多，单basecall的话速度确实很快,后续就同样的nanopolish，方便多了
+```
+slow5-dorado basecaller /scratch/lb4489/project/dRNA/slow5-dorado/bin/rna002_70bps_fast@v3 --emit-fastq sh_rep2.blow5 > sh_rep2.fastq
+
+nanopolish index sh_rep2.fastq --slow5 sh_rep2.blow5
+minimap2 -ax map-ont -uf -t 120 --secondary=no /scratch/lb4489/project/dRNA/GRCh38_trans.mmi  /scratch/lb4489/project/dRNA/slow5/sh_rep2.fastq > sh_rep2.sam 2>> ./sh_rep2.bam.log
+samtools view -Sb ./sh_rep2.sam | samtools sort -o ./sh_rep2.bam - &>> ./sh_rep2.bam.log
+samtools index ./sh_rep2.bam &>> ./sh_rep2.bam.log
+
+nanopolish eventalign --reads sh_rep2.fastq \
+	--bam ./sh_rep2.bam \
+	--genome /scratch/lb4489/bioindex/gencode.v46.transcripts.fa \
+	--signal-index \
+	--scale-events \
+	--summary ./sh_rep2.summary.txt \
+	--threads 120 > ./sh_rep2.eventalign.txt
+```
+
 #bam文件
 ```
 samtools merge merged.bam  ./*.bam
