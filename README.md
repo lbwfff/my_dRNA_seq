@@ -25,7 +25,7 @@ awk 'FNR==1 && NR!=1 { next; } { print }' $(ls *eventalign.txt | sort) > merge_e
 awk 'FNR==1 && NR!=1 { next; } { print }' $(ls *summary.txt | sort) > merge_summary.txt
 ```
 
-还有一种方法就是合并fast5文件，例如slow5tools，nanopolish可以直接用，但是basecall会麻烦一些
+还有一种方法就是合并fast5文件，例如slow5tools，nanopolish可以直接用，但是basecall会麻烦一些，需要借助buttery-eel[https://github.com/Psy-Fer/buttery-eel]
 这个方法对于损坏的fast5文件会很麻烦，例如WT2好像就用一些损坏的文件
 ```
 slow5tools f2s fast5_dir -d blow5_dir  -p 8
