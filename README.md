@@ -25,6 +25,12 @@ awk 'FNR==1 && NR!=1 { next; } { print }' $(ls *eventalign.txt | sort) > merge_e
 awk 'FNR==1 && NR!=1 { next; } { print }' $(ls *summary.txt | sort) > merge_summary.txt
 ```
 
+#bam文件
+```
+samtools merge merged.bam  ./*.bam
+```
+
+
 还有一种方法就是合并fast5文件，例如slow5tools，nanopolish可以直接用，但是basecall会麻烦一些，需要借助buttery-eel[https://github.com/Psy-Fer/buttery-eel]
 这个方法对于损坏的fast5文件会很麻烦，例如WT2好像就用一些损坏的文件
 ```
@@ -51,10 +57,7 @@ nanopolish eventalign --reads sh_rep2.fastq \
 	--threads 120 > ./sh_rep2.eventalign.txt
 ```
 
-#bam文件
-```
-samtools merge merged.bam  ./*.bam
-```
+
 
 #对于m6Anet结果进行坐标转换
 ```
