@@ -54,7 +54,7 @@ nanopolish eventalign --reads sh_rep2.fastq \
 	--signal-index \
 	--scale-events \
 	--summary ./sh_rep2.summary.txt \
-	--threads 120 > ./sh_rep2.eventalign.txt
+	--threads 120 > ./sh_rep2.eventalign.txt #为啥我觉得是rep1呢，为啥会有这个错觉
 ```
 
 
